@@ -1,0 +1,129 @@
+@model LoadTemplateSystem.Web.Models.ViewModels.LoadTemplateLineVm
+@{
+    var index = ViewData["RowIndex"] ?? 0;
+    var rowDisplay = Model.IsDeleted ? "display:none;" : "";
+
+    string FormatQty(decimal? val)
+    {
+        if (!val.HasValue || val.Value <= 0) return "";
+        return val.Value.ToString("0.##");
+    }
+}
+
+<tr class="template-line-row align-middle" data-index="@index" data-skucode="@Model.SkuCode" data-skuname="@Model.SkuName" style="@rowDisplay">
+    <!-- Select checkbox -->
+    <td class="text-center">
+        <input type="checkbox" class="form-check-input line-select-checkbox" />
+        <input type="hidden" name="Lines[@index].Id" value="@Model.Id" />
+        <input type="hidden" name="Lines[@index].UID" value="@Model.UID" class="line-uid" />
+        <input type="hidden" name="Lines[@index].LoadTemplateUID" value="@Model.LoadTemplateUID" />
+        <input type="hidden" name="Lines[@index].SkuCode" value="@Model.SkuCode" class="line-sku-code" />
+        <input type="hidden" name="Lines[@index].SkuName" value="@Model.SkuName" />
+        <input type="hidden" name="Lines[@index].IsDeleted" value="@(Model.IsDeleted ? "true" : "false")" class="line-is-deleted" />
+        <input type="hidden" name="Lines[@index].Sequence" value="@Model.Sequence" class="line-sequence" />
+    </td>
+
+    <!-- SKU Code -->
+    <td class="text-start">
+        <span class="fw-semibold font-monospace">@Model.SkuCode</span>
+    </td>
+
+    <!-- SKU Name -->
+    <td class="text-start">
+        <span class="text-dark">@Model.SkuName</span>
+    </td>
+
+    <!-- UOM Dropdown (Show Name, Save Code) -->
+    <td>
+        <select name="Lines[@index].SelectedUomCode" class="form-select form-select-sm line-uom-select text-center" title="Select Unit of Measure">
+            @foreach (var uom in Model.AvailableUoms)
+            {
+                if (string.Equals(uom.Code, Model.SelectedUomCode, StringComparison.OrdinalIgnoreCase))
+                {
+                    <option value="@uom.Code" selected="selected">@uom.Name</option>
+                }
+                else
+                {
+                    <option value="@uom.Code">@uom.Name</option>
+                }
+            }
+        </select>
+    </td>
+
+    <!-- MON (Qty) -->
+    <td>
+        <input type="number"
+               step="0.01"
+               min="0"
+               placeholder="0"
+               name="Lines[@index].MonQty"
+               value="@FormatQty(Model.MonQty)"
+               class="form-control form-control-sm text-center day-qty mon-qty" />
+    </td>
+
+    <!-- Tue (Qty) -->
+    <td>
+        <input type="number"
+               step="0.01"
+               min="0"
+               placeholder="0"
+               name="Lines[@index].TueQty"
+               value="@FormatQty(Model.TueQty)"
+               class="form-control form-control-sm text-center day-qty tue-qty" />
+    </td>
+
+    <!-- Wed (Qty) -->
+    <td>
+        <input type="number"
+               step="0.01"
+               min="0"
+               placeholder="0"
+               name="Lines[@index].WedQty"
+               value="@FormatQty(Model.WedQty)"
+               class="form-control form-control-sm text-center day-qty wed-qty" />
+    </td>
+
+    <!-- Thu (Qty) -->
+    <td>
+        <input type="number"
+               step="0.01"
+               min="0"
+               placeholder="0"
+               name="Lines[@index].ThuQty"
+               value="@FormatQty(Model.ThuQty)"
+               class="form-control form-control-sm text-center day-qty thu-qty" />
+    </td>
+
+    <!-- Fri (Qty) -->
+    <td>
+        <input type="number"
+               step="0.01"
+               min="0"
+               placeholder="0"
+               name="Lines[@index].FriQty"
+               value="@FormatQty(Model.FriQty)"
+               class="form-control form-control-sm text-center day-qty fri-qty" />
+    </td>
+
+    <!-- Sat (Qty) -->
+    <td>
+        <input type="number"
+               step="0.01"
+               min="0"
+               placeholder="0"
+               name="Lines[@index].SatQty"
+               value="@FormatQty(Model.SatQty)"
+               class="form-control form-control-sm text-center day-qty sat-qty" />
+    </td>
+
+    <!-- Sun (Qty) -->
+    <td>
+        <input type="number"
+               step="0.01"
+               min="0"
+               placeholder="0"
+               name="Lines[@index].SunQty"
+               value="@FormatQty(Model.SunQty)"
+               class="form-control form-control-sm text-center day-qty sun-qty" />
+    </td>
+</tr>

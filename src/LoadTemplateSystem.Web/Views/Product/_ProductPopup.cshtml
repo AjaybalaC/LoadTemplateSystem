@@ -1,0 +1,64 @@
+<div class="modal fade" id="productPopupModal" tabindex="-1" aria-labelledby="productPopupModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content shadow border-0">
+            <div class="modal-header bg-primary text-white py-2">
+                <h6 class="modal-title fw-bold" id="productPopupModalLabel">
+                    Add Products
+                </h6>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-3">
+                <!-- Search input (Search should be done on key press only) -->
+                <div class="mb-3">
+                    <div class="input-group input-group-sm">
+                        <input type="text"
+                               id="productSearchInput"
+                               class="form-control"
+                               placeholder="Search by SKU Code / Name"
+                               autocomplete="off" />
+                        <button class="btn btn-primary" type="button" id="popupSearchBtn">
+                            Search
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Loading indicator -->
+                <div id="productSearchLoading" class="text-center py-3 d-none">
+                    <div class="spinner-border spinner-border-sm text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <div class="text-muted small mt-1">Searching products...</div>
+                </div>
+
+                <!-- Results table (Columns: Checkbox, SKU Code, SKU Name matching Page 2 wireframe) -->
+                <div class="table-responsive border rounded" style="max-height: 320px;">
+                    <table class="table table-hover align-middle mb-0" id="productResultsTable">
+                        <thead style="background-color: #19639f !important;">
+                            <tr style="background-color: #19639f !important;">
+                                <th style="width: 40px; background-color: #19639f !important; color: #ffffff !important;" class="text-center text-white">
+                                    <input type="checkbox" id="selectAllProductsCheckbox" class="form-check-input" />
+                                </th>
+                                <th style="width: 120px; background-color: #19639f !important; color: #ffffff !important;" class="text-white">SKU Code</th>
+                                <th style="background-color: #19639f !important; color: #ffffff !important;" class="text-white">SKU Name</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productResultsTbody" class="small">
+                            <!-- Populated dynamically via keypress AJAX -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Empty state -->
+                <div id="noProductsFound" class="text-center py-3 text-muted d-none small">
+                    No products found.
+                </div>
+            </div>
+
+            <div class="modal-footer bg-light py-2 justify-content-center">
+                <button type="button" class="btn btn-primary btn-sm px-4 fw-semibold" id="addSelectedProductsBtn" disabled>
+                    Add Selected Product
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

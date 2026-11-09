@@ -1,0 +1,29 @@
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow border-0">
+            <form id="deleteTemplateForm" method="post" asp-controller="LoadTemplate" asp-action="Delete">
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="deleteTemplateId" name="id" value="" />
+                
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title d-flex align-items-center gap-2" id="deleteConfirmModalLabel">
+                        <i class="bi bi-trash-fill"></i> Delete Confirmation
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body py-4 text-center">
+                    <p class="fs-5 mb-1 fw-semibold text-dark">Are you sure you want to delete?</p>
+                    <p class="text-muted small mb-0">Template: <strong id="deleteTemplateCode" class="text-danger"></strong></p>
+                </div>
+                <div class="modal-footer bg-light justify-content-center gap-2">
+                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">
+                        No
+                    </button>
+                    <button type="submit" class="btn btn-danger px-4" id="confirmDeleteButton">
+                        Yes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

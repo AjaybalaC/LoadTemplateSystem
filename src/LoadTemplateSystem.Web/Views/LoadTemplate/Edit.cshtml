@@ -1,0 +1,150 @@
+@model LoadTemplateSystem.Web.Models.ViewModels.LoadTemplateEditVm
+@{
+    var isNew = Model.Id == 0;
+    ViewData["Title"] = "Edit Load Template";
+}
+
+<!-- Breadcrumb (Exact match to Page 2/3) -->
+<nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb small">
+        <li class="breadcrumb-item"><a asp-controller="LoadTemplate" asp-action="Index" class="text-decoration-none">Home</a></li>
+        <li class="breadcrumb-item"><a asp-controller="LoadTemplate" asp-action="Index" class="text-decoration-none">Maintain Load Request Template</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Edit Load Template</li>
+    </ol>
+</nav>
+
+<form asp-action="Save" method="post" id="loadTemplateEditForm">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="UID" />
+
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body p-4">
+            <!-- Title -->
+            <h2 class="h4 fw-bold text-dark mb-4">Edit Load Template</h2>
+
+            <!-- Validation Summary -->
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger shadow-sm mb-4" role="alert"></div>
+
+            <!-- Header Inputs Card (Template Name & Description) -->
+            <div class="card bg-light border-0 mb-4">
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label asp-for="TemplateName" class="form-label fw-bold text-secondary">
+                                Template Name
+                            </label>
+                            <input asp-for="TemplateName"
+                                   class="form-control"
+                                   placeholder="Enter Name"
+                                   maxlength="250"
+                                   required />
+                            <span asp-validation-for="TemplateName" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="TemplateDescription" class="form-label fw-bold text-secondary">
+                                Description
+                            </label>
+                            <input asp-for="TemplateDescription"
+                                   class="form-control"
+                                   placeholder="Enter Template Description"
+                                   maxlength="250" />
+                            <span asp-validation-for="TemplateDescription" class="text-danger small"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Model Quantity for Load Template Items Section -->
+            <div class="mt-4">
+                <h5 class="fw-bold text-dark mb-3">Model Quantity for Load Template Items</h5>
+
+                <!-- Sub-bar: Search by SKU Code/Name on left, Add Product button on right -->
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-3">
+                    <div class="col-md-5 col-lg-4">
+                        <div class="input-group input-group-sm">
+                            <input type="text"
+                                   id="lineFilterSearchInput"
+                                   class="form-control"
+                                   placeholder="Search by SKU Code/Name"
+                                   autocomplete="off" />
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-search text-muted"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-primary px-3 fw-semibold" id="btnOpenProductModal" data-bs-toggle="modal" data-bs-target="#productPopupModal">
+                            Add Product
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Editable Lines Table (Blue stacked headers matching Page 2/3 wireframe) -->
+                <div class="table-responsive border rounded mb-4">
+                    <table class="table table-hover align-middle mb-0 text-center" id="linesTable">
+                        <thead style="background-color: #19639f !important;">
+                            <tr style="background-color: #19639f !important;">
+                                <th style="width: 45px; background-color: #19639f !important; color: #ffffff !important;" rowspan="2" class="align-middle text-white">
+                                    <input type="checkbox" id="selectAllLinesCheckbox" class="form-check-input" title="Select All" />
+                                </th>
+                                <th style="width: 140px; background-color: #19639f !important; color: #ffffff !important;" rowspan="2" class="align-middle text-start text-white">SKU Code</th>
+                                <th style="min-width: 250px; background-color: #19639f !important; color: #ffffff !important;" rowspan="2" class="align-middle text-start text-white">SKU Name</th>
+                                <th style="width: 120px; background-color: #19639f !important; color: #ffffff !important;" rowspan="2" class="align-middle text-white">UOM</th>
+                                <th colspan="7" style="background-color: #19639f !important; color: #ffffff !important;" class="text-center border-bottom border-light text-white">Load</th>
+                            </tr>
+                            <tr class="small" style="background-color: #19639f !important;">
+                                <th style="width: 80px; background-color: #19639f !important; color: #ffffff !important;" class="fw-semibold text-white">MON (Qty)</th>
+                                <th style="width: 80px; background-color: #19639f !important; color: #ffffff !important;" class="fw-semibold text-white">Tue (Qty)</th>
+                                <th style="width: 80px; background-color: #19639f !important; color: #ffffff !important;" class="fw-semibold text-white">Wed (Qty)</th>
+                                <th style="width: 80px; background-color: #19639f !important; color: #ffffff !important;" class="fw-semibold text-white">Thu (Qty)</th>
+                                <th style="width: 80px; background-color: #19639f !important; color: #ffffff !important;" class="fw-semibold text-white">Fri (Qty)</th>
+                                <th style="width: 80px; background-color: #19639f !important; color: #ffffff !important;" class="fw-semibold text-white">Sat (Qty)</th>
+                                <th style="width: 80px; background-color: #19639f !important; color: #ffffff !important;" class="fw-semibold text-white">Sun (Qty)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="linesTableBody">
+                            @if (Model.Lines != null && Model.Lines.Count > 0)
+                            {
+                                @for (int i = 0; i < Model.Lines.Count; i++)
+                                {
+                                    ViewData["RowIndex"] = i;
+                                    <partial name="_LineRow" model="Model.Lines[i]" view-data="ViewData" />
+                                }
+                            }
+                        </tbody>
+                        <tfoot class="table-light">
+                            <tr id="emptyLinesRow" class="@(Model.Lines != null && Model.Lines.Any(l => !l.IsDeleted) ? "d-none" : "")">
+                                <td colspan="11" class="text-center py-5 text-muted">
+                                    <i class="bi bi-box-seam fs-2 text-secondary d-block mb-2"></i>
+                                    <div class="fw-semibold">No product items added yet.</div>
+                                    <div class="small mb-3">Click <strong>Add Product</strong> above to select items.</div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <!-- Bottom Action Buttons: Back, Delete Selected From List, Save (Exact match to Page 2) -->
+                <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                    <a asp-action="Index" class="btn btn-outline-secondary px-4 fw-semibold">
+                        Back
+                    </a>
+                    <button type="button" class="btn btn-outline-danger px-4 fw-semibold" id="btnDeleteSelectedLines" disabled>
+                        Delete Selected From List
+                    </button>
+                    <button type="submit" class="btn btn-primary px-4 fw-semibold" id="saveTemplateBtn">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- Add Products Modal -->
+<partial name="~/Views/Product/_ProductPopup.cshtml" />
+
+@section Scripts {
+    <script src="~/js/loadTemplateEdit.js" asp-append-version="true"></script>
+}

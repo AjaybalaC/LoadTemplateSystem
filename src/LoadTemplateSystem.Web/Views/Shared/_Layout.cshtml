@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - WINIT Mobile</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+    <header class="bg-white border-bottom shadow-sm">
+        <div class="container-fluid px-4 py-2 d-flex justify-content-between align-items-center">
+            <!-- WINIT Brand -->
+            <a class="navbar-brand text-decoration-none d-flex align-items-center gap-2" asp-controller="LoadTemplate" asp-action="Index">
+                <span class="fs-4 fw-bold text-dark">WINIT</span>
+                <span class="badge bg-secondary-subtle text-secondary border small">mobile</span>
+            </a>
+
+            <!-- User Profile (Exact match to PDF wireframe) + API Docs -->
+            <div class="d-flex align-items-center gap-2">
+                <a asp-controller="LoadTemplate" asp-action="Index" class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-list-check me-1"></i> Templates
+                </a>
+                <a href="/swagger" target="_blank" class="btn btn-sm btn-outline-success" title="Open Swagger API documentation">
+                    <i class="bi bi-braces-asterisk me-1"></i> Swagger API
+                </a>
+                <div class="text-end small ms-2 ps-2 border-start">
+                    <div class="fw-bold text-dark">Musfiq Ali Khan</div>
+                    <div class="text-muted" style="font-size: 0.75rem;">Admin</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container-fluid px-4 py-3 flex-grow-1">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show d-flex align-items-center shadow-sm" role="alert">
+                <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+                <div>@TempData["SuccessMessage"]</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center shadow-sm" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+                <div>@TempData["ErrorMessage"]</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top bg-white py-2 mt-auto text-muted small">
+        <div class="container-fluid px-4 d-flex justify-content-between align-items-center">
+            <span>&copy; @DateTime.UtcNow.Year - WINIT Mobile (.NET System Task)</span>
+            <span>Maintain Load Request Template Workflow</span>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

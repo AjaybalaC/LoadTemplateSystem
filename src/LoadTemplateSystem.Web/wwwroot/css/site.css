@@ -1,0 +1,91 @@
+/* LoadTemplateSystem Custom Styles */
+
+body {
+    background-color: #f8f9fa;
+    color: #212529;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.hover-primary:hover {
+    color: var(--bs-primary) !important;
+}
+
+/* Day column headers */
+.day-col-header {
+    background-color: #f1f5f9 !important;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* Day quantity input fields */
+.day-qty {
+    padding: 0.25rem 0.4rem;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+}
+
+.day-qty:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+}
+
+/* Hide number spinner on subtle design */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    opacity: 0.6;
+}
+
+/* Line row styling */
+.template-line-row:hover {
+    background-color: rgba(13, 110, 253, 0.02) !important;
+}
+
+/* Badges */
+.badge.bg-primary-subtle {
+    background-color: #e7f1ff !important;
+    color: #0a58ca !important;
+}
+
+.badge.bg-success-subtle {
+    background-color: #d1e7dd !important;
+    color: #0f5132 !important;
+}
+
+.badge.bg-secondary-subtle {
+    background-color: #e2e3e5 !important;
+    color: #41464b !important;
+}
+
+/* Table styling - WINIT mobile blue header matching wireframe */
+.table thead th,
+.table thead td {
+    background-color: #19639f !important;
+    color: #ffffff !important;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    vertical-align: middle;
+}
+
+.table thead th a,
+.table thead th .sort-link {
+    color: #ffffff !important;
+    text-decoration: none !important;
+    font-weight: 600;
+}
+
+.table thead th a:hover,
+.table thead th .sort-link:hover {
+    color: #e0f2fe !important;
+    text-decoration: underline !important;
+}
+
+.table thead th i.bi {
+    color: #ffffff !important;
+}
+
+/* Modal search styling */
+#productPopupModal .table td, 
+#productPopupModal .table th {
+    padding: 0.65rem 0.75rem;
+}

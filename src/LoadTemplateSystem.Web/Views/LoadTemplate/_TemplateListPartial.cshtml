@@ -1,0 +1,150 @@
+@model LoadTemplateSystem.Web.Models.ViewModels.LoadTemplateListVm
+
+<!-- Template List Table (Exact match to Page 1 wireframe) -->
+<div class="table-responsive border rounded">
+    <table class="table table-hover align-middle mb-0" id="templatesTable">
+        <thead style="background-color: #19639f !important;">
+            <tr style="background-color: #19639f !important;">
+                @{
+                    string GetSortDirection(string col) =>
+                        Model.SortColumn == col && Model.SortDirection == "asc" ? "desc" : "asc";
+
+                    string RenderSortIcon(string col)
+                    {
+                        if (Model.SortColumn != col) return "bi-arrow-down-up opacity-50";
+                        return Model.SortDirection == "asc" ? "bi-sort-up" : "bi-sort-down";
+                    }
+                }
+
+                <!-- SN No -->
+                <th style="width: 70px; background-color: #19639f !important; color: #ffffff !important;" class="text-center text-white">SN No</th>
+
+                <!-- Template Name -->
+                <th style="min-width: 250px; background-color: #19639f !important; color: #ffffff !important;" class="text-white">
+                    <a asp-action="Index"
+                       asp-route-searchTerm="@Model.SearchTerm"
+                       asp-route-page="@Model.PageNumber"
+                       asp-route-pageSize="@Model.PageSize"
+                       asp-route-sortColumn="TemplateName"
+                       asp-route-sortDirection="@GetSortDirection("TemplateName")"
+                       class="sort-link text-decoration-none d-inline-flex align-items-center gap-1"
+                       style="color: #ffffff !important; font-weight: 600;"
+                       data-col="TemplateName"
+                       data-dir="@GetSortDirection("TemplateName")">
+                        <span>Template Name</span>
+                        <i class="bi @RenderSortIcon("TemplateName") small" style="color: #ffffff !important;"></i>
+                    </a>
+                </th>
+
+                <!-- Template Description -->
+                <th style="background-color: #19639f !important; color: #ffffff !important;" class="text-white">
+                    <a asp-action="Index"
+                       asp-route-searchTerm="@Model.SearchTerm"
+                       asp-route-page="@Model.PageNumber"
+                       asp-route-pageSize="@Model.PageSize"
+                       asp-route-sortColumn="TemplateDescription"
+                       asp-route-sortDirection="@GetSortDirection("TemplateDescription")"
+                       class="sort-link text-decoration-none d-inline-flex align-items-center gap-1"
+                       style="color: #ffffff !important; font-weight: 600;"
+                       data-col="TemplateDescription"
+                       data-dir="@GetSortDirection("TemplateDescription")">
+                        <span>Template Description</span>
+                        <i class="bi @RenderSortIcon("TemplateDescription") small" style="color: #ffffff !important;"></i>
+                    </a>
+                </th>
+
+                <!-- No of Items -->
+                <th class="text-center text-white" style="width: 140px; background-color: #19639f !important; color: #ffffff !important;">
+                    <a asp-action="Index"
+                       asp-route-searchTerm="@Model.SearchTerm"
+                       asp-route-page="@Model.PageNumber"
+                       asp-route-pageSize="@Model.PageSize"
+                       asp-route-sortColumn="ItemCount"
+                       asp-route-sortDirection="@GetSortDirection("ItemCount")"
+                       class="sort-link text-decoration-none d-inline-flex align-items-center gap-1"
+                       style="color: #ffffff !important; font-weight: 600;"
+                       data-col="ItemCount"
+                       data-dir="@GetSortDirection("ItemCount")">
+                        <span>No of Items</span>
+                        <i class="bi @RenderSortIcon("ItemCount") small" style="color: #ffffff !important;"></i>
+                    </a>
+                </th>
+
+                <!-- Action -->
+                <th class="text-center text-white" style="width: 110px; background-color: #19639f !important; color: #ffffff !important;">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Templates.Count > 0)
+            {
+                int index = (Model.PageNumber - 1) * Model.PageSize + 1;
+                @foreach (var item in Model.Templates)
+                {
+                    <tr>
+                        <!-- SN No (01, 02, etc.) -->
+                        <td class="text-center text-muted fw-semibold">
+                            @(index < 10 ? "0" + index : index.ToString())
+                        </td>
+
+                        <!-- Template Name -->
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="fw-bold text-decoration-none text-dark hover-primary">
+                                @item.TemplateName
+                            </a>
+                        </td>
+
+                        <!-- Template Description -->
+                        <td class="text-uppercase text-secondary">
+                            @(string.IsNullOrWhiteSpace(item.TemplateDescription) ? "—" : item.TemplateDescription)
+                        </td>
+
+                        <!-- No of Items (Shows total weekly load quantity of Mon-Sun across all items, or NA if 0) -->
+                        <td class="text-center fw-semibold">
+                            @if (item.TotalUnits > 0)
+                            {
+                                <span>@item.TotalUnits.ToString("0.##")</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted">NA</span>
+                            }
+                        </td>
+
+                        <!-- Action (Edit Pencil & Delete Trash) -->
+                        <td class="text-center">
+                            <div class="d-inline-flex align-items-center gap-2">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="text-dark fs-6" title="Edit Template">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a href="javascript:void(0)"
+                                   class="text-danger fs-6 btn-delete-template"
+                                   data-id="@item.Id"
+                                   data-code="@item.TemplateName"
+                                   title="Delete Template">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    index++;
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" class="text-center py-5 text-muted">
+                        <i class="bi bi-folder2-open fs-1 text-secondary d-block mb-2"></i>
+                        <h6 class="fw-bold">No load templates found</h6>
+                        <p class="small mb-3">No templates matched your search criteria.</p>
+                        <a asp-action="Create" class="btn btn-sm btn-primary">
+                            <i class="bi bi-plus-lg me-1"></i> Add First Template
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Pager -->
+<partial name="_Pager" model="Model" />
